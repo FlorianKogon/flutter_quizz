@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'question_page.dart';
+import 'question.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +32,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  List<Question> listOfQuestions = [
+    Question("Belgique ?", "Ce drapeau est-il celui de la Belgique ?", "images/belgique.jpg", true),
+    Question("Realité ?", "Cette photo a-t-elle été réalisée en studio ?", "images/eagle.jpg", false),
+    Question("Lune ?", "Etes-vous bien sur la Lune ?", "images/lune.jpg", true),
+    Question("Clavier ?", "Est-ce la photo du dernier clavier Logitech ?", "images/commodore.jpg", false),
+    Question("Tintin ?", "Le chien de Tintin s'appelle-t-il Milou ?", "images/tintin.jpg", true ),
+    Question("Russie ?", "Cela est-il le Kremlin ?", "images/russie.jpg", true),
+    Question("Nyctalope ?", "Cet animal est-il nyctalope ?", "images/nyctalope.jpg", true),
+    Question("Pirate ?", "Ce drapeau est-il celui des pirate ?", "images/pirate.png", true),
+    Question("Pharaon ?", "Les pharaons sont-ils des êtres imaginaires ?", "images/pharaon.jpg", false),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             RaisedButton(
               color: Colors.blue,
-              onPressed: () => {
-                print("test")
-              },
+              onPressed: toQuizzQuestion,
               child: Text("Commencez le quizz",
                 style: TextStyle(
                   color: Colors.white,
@@ -68,7 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void toQuizzQuestion(String title, String description) {
-
+  void toQuizzQuestion() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return QuestionPage(listOfQuestions[0].title,
+              listOfQuestions[0].description,
+              listOfQuestions[0].imagePath,
+              listOfQuestions[0].answer
+          );
+        }));
   }
 }
