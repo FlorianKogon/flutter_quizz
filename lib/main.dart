@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void toQuizzQuestion(String title, String question) {
+  void toQuizzQuestion(String title, String description) {
 
   }
 }
