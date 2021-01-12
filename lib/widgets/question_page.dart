@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
+import 'custom_text.dart';
+import 'package:flutter_quizz/models/question.dart';
 
 class QuestionPage extends StatefulWidget {
-
-  QuestionPage(String title, String description, String imagePath, String answer) {
-    this.title = title;
-    this.description = description;
-    this.imagePath = imagePath;
-    this.answer = answer;
-  }
-
-  String title;
-  String description;
-  String imagePath;
-  String answer;
 
   @override
   _QuestionPageState createState() => _QuestionPageState();
@@ -21,19 +11,41 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
 
+  Question question;
+
+  List<Question> listOfQuestions = [
+    Question("Belgique ?", "Ce drapeau est-il celui de la Belgique ?", "images/belgique.jpg", "true"),
+    Question("Realité ?", "Cette photo a-t-elle été réalisée en studio ?", "images/eagle.jpg", "false"),
+    Question("Lune ?", "Etes-vous bien sur la Lune ?", "images/lune.jpg", "true"),
+    Question("Clavier ?", "Est-ce la photo du dernier clavier Logitech ?", "images/commodore.jpg", "false"),
+    Question("Tintin ?", "Le chien de Tintin s'appelle-t-il Milou ?", "images/tintin.jpg", "true" ),
+    Question("Russie ?", "Cela est-il le Kremlin ?", "images/russie.jpg", "true"),
+    Question("Nyctalope ?", "Cet animal est-il nyctalope ?", "images/nyctalope.jpg", "true"),
+    Question("Pirate ?", "Ce drapeau est-il celui des pirate ?", "images/pirate.png", "true"),
+    Question("Pharaon ?", "Les pharaons sont-ils des êtres imaginaires ?", "images/pharaon.jpg", "false"),
+  ];
+
+  int index = 0;
   int score = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    question = listOfQuestions[index];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: CustomText(question.title, color: Colors.white,),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(widget.description,
+            Text(question.description,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -44,7 +56,7 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
             Card(
               elevation: 10.0,
-              child: Image.asset(widget.imagePath,
+              child: Image.asset(question.imagePath,
                 width: MediaQuery.of(context).size.height / 2,
               ),
             ),
@@ -57,8 +69,8 @@ class _QuestionPageState extends State<QuestionPage> {
                 RaisedButton(
                   color: Colors.green,
                   onPressed: () => {
-                    widget.answer == "false" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
-                    widget.answer == "true" ? score++ : score = score
+                    question.answer == "false" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                    question.answer == "true" ? score++ : score = score
                   },
                   child: Text("Vrai",
                     style: TextStyle(
@@ -70,8 +82,8 @@ class _QuestionPageState extends State<QuestionPage> {
                 RaisedButton(
                   color: Colors.red,
                   onPressed: () => {
-                    widget.answer == "true" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
-                    widget.answer == "false" ? score++ : score = score
+                    question.answer == "true" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                    question.answer == "false" ? score++ : score = score
                   },
                   child: Text("Faux",
                     style: TextStyle(
@@ -113,7 +125,8 @@ class _QuestionPageState extends State<QuestionPage> {
               RaisedButton(
                 color: Colors.teal,
                 onPressed: () => {
-                  Navigator.pop(context)
+                  Navigator.pop(context),
+                  nextQuestion()
                 },
                 child: Text(
                   "Continuez",
@@ -128,5 +141,36 @@ class _QuestionPageState extends State<QuestionPage> {
           );
         }
     );
+  }
+
+  Future<Null> alert() async {
+    return showDialog(context: context,
+    barrierDismissible: false,
+    builder: (BuildContext buildContext) {
+      return AlertDialog(
+        title: CustomText("C'est fini", color: Colors.white, factor: 2.0,
+        ),
+        contentPadding: EdgeInsets.all(10.0),
+        content: CustomText("Votre score est de $score"),
+        actions: [
+          FlatButton(onPressed: () => {
+            Navigator.pop(buildContext),
+            Navigator.pop(context)
+          },
+              child: CustomText('OK', factor: 1.2, color: Colors.blue,))
+        ],
+      );
+    });
+  }
+
+  void nextQuestion() {
+    if (index < listOfQuestions.length - 1) {
+      index++;
+      setState(() {
+        question = listOfQuestions[index];
+      });
+    } else {
+      alert();
+    }
   }
 }
