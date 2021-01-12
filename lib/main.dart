@@ -41,10 +41,34 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(name)
+            Card(
+              elevation: 10.0,
+              child: Image.asset('images/cover.jpg',
+                width: MediaQuery.of(context).size.height / 2,
+              ),
+            ),
+            Container(
+              height: 50.0,
+            ),
+            RaisedButton(
+              color: Colors.blue,
+              onPressed: () => {
+                print("test")
+              },
+              child: Text("Commencez le quizz",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void toQuizzQuestion(String title, String question) {
+
   }
 }
