@@ -14,14 +14,14 @@ class QuestionPage extends StatefulWidget {
   String imagePath;
   String answer;
 
-  int numOfAnswers;
-
   @override
   _QuestionPageState createState() => _QuestionPageState();
 
 }
 
 class _QuestionPageState extends State<QuestionPage> {
+
+  int score = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,10 @@ class _QuestionPageState extends State<QuestionPage> {
               children: [
                 RaisedButton(
                   color: Colors.green,
-                  onPressed: () => widget.answer == "false" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                  onPressed: () => {
+                    widget.answer == "false" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                    widget.answer == "true" ? score++ : score = score
+                  },
                   child: Text("Vrai",
                     style: TextStyle(
                       color: Colors.white,
@@ -66,7 +69,10 @@ class _QuestionPageState extends State<QuestionPage> {
                 ),
                 RaisedButton(
                   color: Colors.red,
-                  onPressed: () => (widget.answer == "true") ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                  onPressed: () => {
+                    widget.answer == "true" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
+                    widget.answer == "false" ? score++ : score = score
+                  },
                   child: Text("Faux",
                     style: TextStyle(
                       color: Colors.white,
@@ -90,9 +96,16 @@ class _QuestionPageState extends State<QuestionPage> {
           return SimpleDialog(
             title: Text(title,
               textScaleFactor: 1.4,
+              textAlign: TextAlign.center,
             ),
             contentPadding: EdgeInsets.all(10.0),
             children: [
+              Text("Score : $score / 9",
+                textAlign: TextAlign.center,
+              ),
+              Container(
+                height: 20.0,
+              ),
               Image.asset(imagePath),
               Container(
                 height: 20.0,
