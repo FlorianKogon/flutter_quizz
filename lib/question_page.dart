@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class QuestionPage extends StatefulWidget {
 
-  QuestionPage(String title, String description, String imagePath, bool answer) {
+  QuestionPage(String title, String description, String imagePath, String answer) {
     this.title = title;
     this.description = description;
     this.imagePath = imagePath;
@@ -12,7 +12,9 @@ class QuestionPage extends StatefulWidget {
   String title;
   String description;
   String imagePath;
-  bool answer;
+  String answer;
+
+  int numOfAnswers;
 
   @override
   _QuestionPageState createState() => _QuestionPageState();
@@ -54,7 +56,7 @@ class _QuestionPageState extends State<QuestionPage> {
               children: [
                 RaisedButton(
                   color: Colors.green,
-                  onPressed: () => dialog('test', "OK"),
+                  onPressed: () => widget.answer == "false" ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
                   child: Text("Vrai",
                     style: TextStyle(
                       color: Colors.white,
@@ -64,7 +66,7 @@ class _QuestionPageState extends State<QuestionPage> {
                 ),
                 RaisedButton(
                   color: Colors.red,
-                  onPressed: () => dialog('test', "OK"),
+                  onPressed: () => (widget.answer == "true") ? dialog('Mauvaise réponse', "images/faux.jpg") : dialog('Bonne réponse', 'images/vrai.jpg'),
                   child: Text("Faux",
                     style: TextStyle(
                       color: Colors.white,
@@ -80,7 +82,7 @@ class _QuestionPageState extends State<QuestionPage> {
     );
   }
 
-  Future<Null> dialog(String title, String description) async {
+  Future<Null> dialog(String title, String imagePath) async {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -91,9 +93,9 @@ class _QuestionPageState extends State<QuestionPage> {
             ),
             contentPadding: EdgeInsets.all(10.0),
             children: [
-              Text(
-                description,
-                textScaleFactor: 1.2,
+              Image.asset(imagePath),
+              Container(
+                height: 20.0,
               ),
               RaisedButton(
                 color: Colors.teal,
@@ -101,7 +103,7 @@ class _QuestionPageState extends State<QuestionPage> {
                   Navigator.pop(context)
                 },
                 child: Text(
-                  "Appuyez",
+                  "Continuez",
                   style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.white,
